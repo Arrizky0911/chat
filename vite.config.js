@@ -5,7 +5,6 @@ export default defineConfig(({command, mode}) => {
   return {
     define: {
       'process.env.GOOGLE_API_KEY': JSON.stringify(env.GOOGLE_API_KEY),
-      'process.env.GOOGLE_PROJECT_ID':
     },
   }
-})
+});

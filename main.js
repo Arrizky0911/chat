@@ -8,9 +8,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers';
 import { ChatMessageHistory } from 'langchain/memory';
 import pg from 'pg';
 import { PostgresChatMessageHistory } from "@langchain/community/stores/message/postgres";
-import {Connector} from '@google-cloud/cloud-sql-connector';
-
-const {Pool} = pg;
+// import {Connector} from '@google-cloud/cloud-sql-connector';
 
 const form = document.querySelector('form');
 const promptInput = document.querySelector('input[name="prompt"]');
@@ -23,18 +21,18 @@ form.onsubmit = async ev => {
   output.textContent = 'Generating...';
 
   try {
-    const connector = new Connector();
-    const clientOpts = await connector.getOptions({
-        instanceConnectionName: 'aic-triumphants-001001001:us-central1:aic-triumphants',
-        authType: 'IAM'
-    });
     const poolConfig = {
-      ...clientOpts,
-      user: 'aic-triumphants@aic-triumphants-001001001.iam',
-      database: 'chatHistory',
+      host: "localhost",
+      port: 5432,
+      user: "postgres",
+      password: "Anthony21",
+      database: "aic",
     };
+
+    console.log("poolConfig ok");
     
-    const pool = new Pool(poolConfig);
+    const pool = new pg.Pool(poolConfig);
+
     const prompt = ChatPromptTemplate.fromMessages([
       [
         "system",
@@ -84,6 +82,8 @@ form.onsubmit = async ev => {
       },
       {configurable: {sessionId: "unsued",},},
     );
+
+    console.log("something wrong");
 
     output.textContent = response;
     await pool.end();
